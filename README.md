@@ -36,14 +36,6 @@
  YCODE_CONTEXT7=your_context7_api_key
 ```
 
-## 门户页面
-项目门户页会发布到 GitHub Pages：
-
-- Portal: https://ycode-lin.github.io/YCode.CLI/
-- NuGet: https://www.nuget.org/packages/YCode.CLI
-- Releases: https://github.com/ycode-lin/YCode.CLI/releases
-- Repository: https://github.com/ycode-lin/YCode.CLI
-
 ## 设计分层
 ```mermaid
 flowchart TD
