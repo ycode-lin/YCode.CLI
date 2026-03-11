@@ -28,7 +28,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
   background: linear-gradient(180deg, #040712 0%, #02040b 100%);
 }
 
@@ -115,6 +115,14 @@ code {
   border-radius: 18px;
 }
 
+.topbar-controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -141,6 +149,16 @@ h3 {
   font-family: "Syne", sans-serif;
 }
 
+html[lang="zh-CN"] .brand-copy strong,
+html[lang="zh-CN"] h1,
+html[lang="zh-CN"] h2,
+html[lang="zh-CN"] h3,
+html[lang="zh-CN"] .metric-card strong,
+html[lang="zh-CN"] .pipeline-node strong {
+  font-family: "Noto Sans SC", sans-serif;
+  letter-spacing: -0.01em;
+}
+
 .brand-copy strong {
   font-size: 1.1rem;
 }
@@ -155,6 +173,18 @@ h3 {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-size: 0.73rem;
+}
+
+html[lang="zh-CN"] .brand-copy span,
+html[lang="zh-CN"] .eyebrow,
+html[lang="zh-CN"] .metric-label,
+html[lang="zh-CN"] .terminal-title,
+html[lang="zh-CN"] .terminal-line.is-soft,
+html[lang="zh-CN"] .capability-index,
+html[lang="zh-CN"] .telemetry-item span,
+html[lang="zh-CN"] .command-label {
+  letter-spacing: 0.08em;
+  text-transform: none;
 }
 
 .topbar-status {
@@ -185,6 +215,41 @@ h3 {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(87, 197, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(7, 14, 30, 0.74);
+}
+
+.lang-button {
+  min-width: 68px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  transition: transform 180ms ease, color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.lang-button:hover,
+.lang-button:focus-visible {
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.lang-button.is-active {
+  color: #04111b;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--cyan-soft), var(--green));
+  box-shadow: 0 10px 22px rgba(87, 197, 255, 0.24);
 }
 
 .topnav a,
@@ -281,6 +346,16 @@ h3 {
   text-transform: uppercase;
 }
 
+html[lang="zh-CN"] h1 {
+  max-width: 8.6ch;
+  line-height: 1.04;
+}
+
+html[lang="zh-CN"] h2 {
+  max-width: 12ch;
+  line-height: 1.12;
+}
+
 .hero-text,
 .metric-card p,
 .capability-item p,
@@ -343,6 +418,7 @@ h3 {
 .command-bar code {
   overflow: auto;
   white-space: nowrap;
+  scrollbar-width: thin;
 }
 
 #copy-command {
@@ -381,6 +457,14 @@ h3 {
   font-family: "Syne", sans-serif;
   font-size: 1.28rem;
   text-transform: uppercase;
+}
+
+html[lang="zh-CN"] .metric-card strong,
+html[lang="zh-CN"] .pipeline-node strong,
+html[lang="zh-CN"] h1,
+html[lang="zh-CN"] h2,
+html[lang="zh-CN"] h3 {
+  text-transform: none;
 }
 
 .terminal-stack {
@@ -502,6 +586,11 @@ h3 {
   font-weight: 700;
   text-transform: uppercase;
   background: linear-gradient(135deg, var(--green), var(--cyan-soft));
+}
+
+html[lang="zh-CN"] .telemetry-pill {
+  letter-spacing: 0.08em;
+  text-transform: none;
 }
 
 .telemetry-list {
@@ -796,6 +885,11 @@ h3 {
   .topbar,
   .footer {
     grid-template-columns: 1fr;
+  }
+
+  .topbar-controls,
+  .topnav {
+    justify-content: flex-start;
   }
 
   .hero-copy,
