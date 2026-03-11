@@ -5,6 +5,7 @@ const typedTerminal = document.querySelector("#typed-terminal");
 const metaDescription = document.querySelector("#meta-description");
 const languageButtons = document.querySelectorAll(".lang-button");
 const i18nNodes = document.querySelectorAll("[data-i18n]");
+const i18nHtmlNodes = document.querySelectorAll("[data-i18n-html]");
 const i18nAltNodes = document.querySelectorAll("[data-i18n-alt]");
 const i18nAriaNodes = document.querySelectorAll("[data-i18n-aria-label]");
 const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -14,73 +15,91 @@ const storageKey = "ycode-pages-lang";
 const translations = {
   zh: {
     "meta.title": "YCode CLI | 终端原生 AI 编码代理",
-    "meta.description": "YCode CLI 是一个终端原生的 AI 编码代理，具备子代理编排、MCP 工具接入、记忆层和技能包加载能力。",
+    "meta.description": "YCode CLI 是一个终端原生的 AI 编码代理，专为真实仓库工作流设计，具备子代理编排、MCP 工具接入、记忆层和技能包加载能力。",
     "brand.aria": "YCode CLI 仓库",
     "brand.alt": "YCode CLI 图标",
     "brand.tagline": "终端原生编码代理",
-    "topbar.statusAria": "当前发布状态",
-    "topbar.status": "发布通道：v1.0.5 / NuGet 在线 / Pages 已同步",
-    "nav.nuget": "NuGet",
-    "nav.releases": "发布记录",
-    "nav.source": "源码仓库",
-    "hero.eyebrow": "cli 门户 / 编排 / agent runtime",
-    "hero.title": "把代码操作成一套正在运行的终端系统，而不是静态聊天框。",
-    "hero.body": "YCode CLI 面向真实仓库工作流构建，把 explore、plan、code 拆给不同子代理，通过 MCP 扩展操作面，并用记忆层和技能包维持长链路任务的一致性。",
-    "hero.install": "安装全局工具",
-    "hero.release": "打开最新版本",
+    "topbar.statusAria": "当前运行状态",
+    "topbar.status": "主分支在线 / NuGet 已发布 / Pages 已同步 / Runtime 正在运行",
+    "nav.install": "安装",
+    "nav.releases": "版本",
+    "nav.source": "源码",
+    "hero.eyebrow": "MISSION CONSOLE",
+    "hero.title": "给你的仓库一块真正可操作的 <span>AI 终端甲板</span>。",
+    "hero.body": "YCode CLI 不是把聊天框搬进命令行，而是把探索、规划、改码、发布接到一条能持续运行的仓库操作链路里。",
+    "hero.strip1": "子代理路由",
+    "hero.strip2": "MCP 工具面",
+    "hero.strip3": "记忆层",
+    "hero.strip4": "技能包",
+    "hero.install": "立即安装",
+    "hero.release": "查看最新版本",
     "hero.commandLabel": "bootstrap",
-    "metrics.execution.label": "执行模型",
-    "metrics.execution.title": "Explore / Plan / Code",
-    "metrics.execution.body": "子代理让上下文更小，推理和决策也更清晰。",
-    "metrics.tools.label": "工具表面",
-    "metrics.tools.title": "MCP + 文件 + 任务",
-    "metrics.tools.body": "不是只靠提示词，而是用结构化操作完成工作。",
-    "metrics.state.label": "状态层",
-    "metrics.state.title": "Memory + Skills",
-    "metrics.state.body": "项目知识不会困在一次孤立会话里。",
-    "terminal.title": "实时会话 / ycode runtime",
-    "terminal.prelude1": "$ ycode \"检查仓库、修补 workflow、发布包\"",
-    "terminal.prelude2": "[agent] 正在加载记忆 · 解析技能包 · 准备工具",
-    "telemetry.eyebrow": "运行遥测",
+    "hero.stat1Label": "运行模型",
+    "hero.stat1Value": "Explore / Plan / Code",
+    "hero.stat1Body": "把仓库工作拆进更清晰的执行轨道。",
+    "hero.stat2Label": "能力面",
+    "hero.stat2Value": "Files / Tasks / MCP",
+    "hero.stat2Body": "从命令到动作，不停留在提示词层面。",
+    "terminal.title": "live ops / ycode runtime",
+    "terminal.prelude1": "$ ycode \"检查仓库、补丁 workflow、发包、更新站点\"",
+    "terminal.prelude2": "[runtime] 正在恢复上下文、挂载工具链、准备执行序列",
+    "ops.streamLabel": "release stream",
+    "ops.streamState": "热",
+    "ops.item1Key": "包仓",
+    "ops.item1Value": "NuGet.org",
+    "ops.item2Key": "镜像",
+    "ops.item2Value": "GitHub Packages",
+    "ops.item3Key": "部署",
+    "ops.item3Value": "Pages Auto Deploy",
+    "telemetry.eyebrow": "runtime telemetry",
     "telemetry.active": "运行中",
     "telemetry.agent": "代理切换",
     "telemetry.tool": "工具执行",
     "telemetry.memory": "记忆召回",
-    "capabilities.eyebrow": "能力面",
-    "capabilities.title": "它为需要结构化动作的仓库操作而生，不是只会“聊得像对”。",
-    "capabilities.route.title": "子代理路由",
-    "capabilities.route.body": "把发现、规划和代码执行拆到不同职责轨道上。",
-    "capabilities.mcp.title": "MCP 集成",
-    "capabilities.mcp.body": "把外部能力面稳定接进 CLI，而不是压扁成纯文本。",
-    "capabilities.memory.title": "记忆层",
-    "capabilities.memory.body": "在更长的工程会话里保留 profile、daily 和 project 上下文。",
-    "capabilities.skills.title": "技能加载",
-    "capabilities.skills.body": "用可复用技能包标准化发版、评审、UI 和编码流程。",
-    "workflow.eyebrow": "工作流卡组",
-    "workflow.title": "典型命令界面",
+    "systems.eyebrow": "system lanes",
+    "systems.title": "把仓库里的关键动作排成一条能连贯推进的控制面。",
+    "systems.lane1Title": "发现层",
+    "systems.lane1Body": "扫描代码树、workflow、tags、packages，把现状提炼成可决策的仓库图谱。",
+    "systems.lane2Title": "规划层",
+    "systems.lane2Body": "把多步任务拆成块，让自动化、文档、UI、发布链路能协同演进。",
+    "systems.lane3Title": "执行层",
+    "systems.lane3Body": "直接编辑文件、调用工具、打标签、发版，而不是停在分析报告里。",
+    "systems.sideBadge": "agent stack",
+    "systems.cell1Label": "route",
+    "systems.cell1Value": "Subagents",
+    "systems.cell2Label": "extend",
+    "systems.cell2Value": "MCP",
+    "systems.cell3Label": "retain",
+    "systems.cell3Value": "Memory",
+    "systems.cell4Label": "repeat",
+    "systems.cell4Value": "Skills",
+    "systems.sideBody": "你得到的不是“会回答问题”的模型，而是一套更像工程控制面的终端执行器。",
+    "workflow.eyebrow": "command scenarios",
+    "workflow.title": "直接从命令行发起真正的仓库任务。",
+    "workflow.card1Tag": "release",
     "workflow.command1": "ycode \"检查仓库并起草发版计划\"",
+    "workflow.card1Body": "先拉出当前版本状态、Secrets、workflow 风险点，再决定下一步。",
+    "workflow.card2Tag": "ship",
     "workflow.command2": "ycode \"接好 GitHub Actions 并发布到 nuget.org\"",
+    "workflow.card2Body": "自动化链路、包元数据、tag 发布和 release 资产可以一次串起来。",
+    "workflow.card3Tag": "design",
     "workflow.command3": "ycode \"把 pages 门户优化成终端化体验\"",
-    "workflow.read.label": "读取",
-    "workflow.read.title": "仓库图谱",
-    "workflow.reason.label": "推理",
-    "workflow.reason.title": "计划块",
-    "workflow.act.label": "执行",
-    "workflow.act.title": "补丁 + 发布",
-    "dock.install.eyebrow": "安装",
-    "dock.install.title": "NuGet 包",
-    "dock.install.body": "全局安装、查看版本，并检查已发布的包元数据。",
-    "dock.release.eyebrow": "产物",
-    "dock.release.title": "Releases",
-    "dock.release.body": "跟踪 tag 构建、发布资产和自动化输出。",
-    "dock.source.eyebrow": "源码",
-    "dock.source.title": "仓库源码",
-    "dock.source.body": "浏览实现细节、当前 workflow 和代码历史。",
-    "dock.packages.eyebrow": "镜像",
-    "dock.packages.title": "GitHub Packages",
-    "dock.packages.body": "查看由 release workflow 同步发布的镜像仓库。",
-    "chart.eyebrow": "信号",
-    "chart.title": "仓库热度轨迹",
+    "workflow.card3Body": "前端也能走同一套工作流，不用跳出仓库换上下文。",
+    "launch.installEyebrow": "install node",
+    "launch.installTitle": "NuGet 包",
+    "launch.installBody": "安装全局工具，查看版本、依赖和发布记录。",
+    "launch.releaseEyebrow": "artifact log",
+    "launch.releaseTitle": "Releases",
+    "launch.releaseBody": "追踪 tag、release 资产和每次自动发布的交付结果。",
+    "launch.sourceEyebrow": "source graph",
+    "launch.sourceTitle": "源码仓库",
+    "launch.sourceBody": "查看实现细节、问题修复和工作流演进过程。",
+    "launch.mirrorEyebrow": "mirror registry",
+    "launch.mirrorTitle": "GitHub Packages",
+    "launch.mirrorBody": "查看与 release workflow 同步的镜像包仓。",
+    "launch.open": "打开入口",
+    "chart.eyebrow": "public signal",
+    "chart.title": "仓库增长曲线不是装饰，它是终端系统被持续使用的外部回声。",
     "chart.alt": "YCode CLI 的 Star History 图表",
     "footer.left": "终端优先、自动化驱动、真正理解仓库上下文。",
     "copy.default": "复制",
@@ -89,73 +108,91 @@ const translations = {
   },
   en: {
     "meta.title": "YCode CLI | Terminal-Native AI Coding Agent",
-    "meta.description": "YCode CLI is a terminal-native AI coding agent with subagent orchestration, MCP tool integration, memory layers, and skill loading.",
+    "meta.description": "YCode CLI is a terminal-native AI coding agent built for real repository workflows, with subagent orchestration, MCP tools, memory layers, and skill loading.",
     "brand.aria": "YCode CLI repository",
     "brand.alt": "YCode CLI icon",
     "brand.tagline": "terminal-native coding agent",
-    "topbar.statusAria": "Current release status",
-    "topbar.status": "release channel: v1.0.5 / nuget online / pages synced",
-    "nav.nuget": "NuGet",
+    "topbar.statusAria": "Current runtime status",
+    "topbar.status": "main branch online / NuGet published / Pages synced / runtime active",
+    "nav.install": "Install",
     "nav.releases": "Releases",
     "nav.source": "Source",
-    "hero.eyebrow": "cli portal / orchestration / agent runtime",
-    "hero.title": "Operate code like a live terminal system, not a static chatbot.",
-    "hero.body": "YCode CLI is built for repository work. It routes explore, plan, and code phases across subagents, extends operations through MCP tools, and keeps long-running work coherent with memory and skill packs.",
-    "hero.install": "Install Global Tool",
+    "hero.eyebrow": "MISSION CONSOLE",
+    "hero.title": "Turn your repository into an <span>AI operations deck</span>, not another chat box.",
+    "hero.body": "YCode CLI does not just move chat into a shell. It connects exploration, planning, patching, and shipping into one durable repository workflow.",
+    "hero.strip1": "Subagent Routing",
+    "hero.strip2": "MCP Surfaces",
+    "hero.strip3": "Memory Layers",
+    "hero.strip4": "Skill Packs",
+    "hero.install": "Install Now",
     "hero.release": "Open Latest Release",
     "hero.commandLabel": "bootstrap",
-    "metrics.execution.label": "Execution Model",
-    "metrics.execution.title": "Explore / Plan / Code",
-    "metrics.execution.body": "Subagents keep context smaller and decisions more legible.",
-    "metrics.tools.label": "Tool Surface",
-    "metrics.tools.title": "MCP + Files + Tasks",
-    "metrics.tools.body": "Structured operations instead of prompt-only tricks.",
-    "metrics.state.label": "State",
-    "metrics.state.title": "Memory + Skills",
-    "metrics.state.body": "Project knowledge survives beyond one isolated session.",
-    "terminal.title": "live session / ycode runtime",
-    "terminal.prelude1": "$ ycode \"inspect repo, patch workflow, publish package\"",
-    "terminal.prelude2": "[agent] loading memory · resolving skill packs · preparing tools",
+    "hero.stat1Label": "Execution Model",
+    "hero.stat1Value": "Explore / Plan / Code",
+    "hero.stat1Body": "Repository work runs across clearer execution lanes.",
+    "hero.stat2Label": "Tool Surface",
+    "hero.stat2Value": "Files / Tasks / MCP",
+    "hero.stat2Body": "Commands turn into structured actions, not prompt theater.",
+    "terminal.title": "live ops / ycode runtime",
+    "terminal.prelude1": "$ ycode \"inspect repo, patch workflow, publish package, refresh pages\"",
+    "terminal.prelude2": "[runtime] restoring context, mounting tools, preparing execution sequence",
+    "ops.streamLabel": "release stream",
+    "ops.streamState": "hot",
+    "ops.item1Key": "registry",
+    "ops.item1Value": "NuGet.org",
+    "ops.item2Key": "mirror",
+    "ops.item2Value": "GitHub Packages",
+    "ops.item3Key": "deploy",
+    "ops.item3Value": "Pages Auto Deploy",
     "telemetry.eyebrow": "runtime telemetry",
     "telemetry.active": "active",
     "telemetry.agent": "agent switch",
     "telemetry.tool": "tool execution",
     "telemetry.memory": "memory recall",
-    "capabilities.eyebrow": "capabilities",
-    "capabilities.title": "Made for repo operations that need structure, not vibe-only prompting.",
-    "capabilities.route.title": "Subagent routing",
-    "capabilities.route.body": "Split discovery, planning, and code execution into specialized tracks.",
-    "capabilities.mcp.title": "MCP integration",
-    "capabilities.mcp.body": "Plug external capability surfaces into the CLI without flattening them into plain text.",
-    "capabilities.memory.title": "Memory layers",
-    "capabilities.memory.body": "Carry profile, daily, and project context across longer engineering sessions.",
-    "capabilities.skills.title": "Skill loading",
-    "capabilities.skills.body": "Use repeatable skill packs to standardize release, review, UI, and coding workflows.",
-    "workflow.eyebrow": "workflow deck",
-    "workflow.title": "Typical command surface",
+    "systems.eyebrow": "system lanes",
+    "systems.title": "Arrange repository-critical actions into one control surface that can keep moving forward.",
+    "systems.lane1Title": "Discovery Layer",
+    "systems.lane1Body": "Scan code trees, workflows, tags, and packages to build a decision-ready repo graph.",
+    "systems.lane2Title": "Planning Layer",
+    "systems.lane2Body": "Split multi-step work into blocks so automation, docs, UI, and release flow can evolve together.",
+    "systems.lane3Title": "Execution Layer",
+    "systems.lane3Body": "Edit files, call tools, tag releases, and ship instead of stopping at analysis.",
+    "systems.sideBadge": "agent stack",
+    "systems.cell1Label": "route",
+    "systems.cell1Value": "Subagents",
+    "systems.cell2Label": "extend",
+    "systems.cell2Value": "MCP",
+    "systems.cell3Label": "retain",
+    "systems.cell3Value": "Memory",
+    "systems.cell4Label": "repeat",
+    "systems.cell4Value": "Skills",
+    "systems.sideBody": "What you get is not a model that merely answers. It is a terminal executor shaped like an engineering control surface.",
+    "workflow.eyebrow": "command scenarios",
+    "workflow.title": "Launch real repository tasks directly from the terminal.",
+    "workflow.card1Tag": "release",
     "workflow.command1": "ycode \"inspect the repo and draft a release plan\"",
+    "workflow.card1Body": "Pull current version state, secrets, and workflow risks before choosing the next move.",
+    "workflow.card2Tag": "ship",
     "workflow.command2": "ycode \"wire GitHub Actions and publish to nuget.org\"",
+    "workflow.card2Body": "Automation, package metadata, tags, and release artifacts can be chained in one pass.",
+    "workflow.card3Tag": "design",
     "workflow.command3": "ycode \"optimize the pages portal with terminal UX\"",
-    "workflow.read.label": "read",
-    "workflow.read.title": "repo graph",
-    "workflow.reason.label": "reason",
-    "workflow.reason.title": "plan blocks",
-    "workflow.act.label": "act",
-    "workflow.act.title": "patch + ship",
-    "dock.install.eyebrow": "install",
-    "dock.install.title": "NuGet Package",
-    "dock.install.body": "Install globally, review versions, and see the published package metadata.",
-    "dock.release.eyebrow": "artifacts",
-    "dock.release.title": "Releases",
-    "dock.release.body": "Track tagged builds, release assets, and automation output.",
-    "dock.source.eyebrow": "source",
-    "dock.source.title": "Repository",
-    "dock.source.body": "Browse implementation details, current workflows, and code history.",
-    "dock.packages.eyebrow": "mirror",
-    "dock.packages.title": "GitHub Packages",
-    "dock.packages.body": "Inspect the mirrored package registry published from the release workflow.",
-    "chart.eyebrow": "signal",
-    "chart.title": "Repository traction",
+    "workflow.card3Body": "Frontend work can run through the same workflow without breaking repository context.",
+    "launch.installEyebrow": "install node",
+    "launch.installTitle": "NuGet Package",
+    "launch.installBody": "Install globally and inspect versions, dependencies, and release history.",
+    "launch.releaseEyebrow": "artifact log",
+    "launch.releaseTitle": "Releases",
+    "launch.releaseBody": "Track tags, release assets, and every automated delivery run.",
+    "launch.sourceEyebrow": "source graph",
+    "launch.sourceTitle": "Repository",
+    "launch.sourceBody": "Review implementation details, fixes, and workflow evolution.",
+    "launch.mirrorEyebrow": "mirror registry",
+    "launch.mirrorTitle": "GitHub Packages",
+    "launch.mirrorBody": "Inspect the mirrored registry published from the release workflow.",
+    "launch.open": "Open",
+    "chart.eyebrow": "public signal",
+    "chart.title": "The growth curve is not decoration. It is the external echo of a terminal system people keep using.",
     "chart.alt": "Star History chart for YCode CLI",
     "footer.left": "Terminal-first, automation-heavy, repository-aware.",
     "copy.default": "Copy",
@@ -167,42 +204,42 @@ const translations = {
 const terminalSessions = {
   zh: [
     [
-      { text: "> explore: 仓库扫描完成 / 已识别 .NET 全局工具项目", className: "comment" },
-      { text: "> tool: 已读取包元数据、workflows、release tags", className: "tool" },
-      { text: "assistant: 我发现这里已经有发布链路和面向 dotnet tool 分发的 CLI 包配置。", className: "assistant" },
-      { text: "assistant: 下一步是修补自动化、校验包图标，然后打带标签的发布版本。", className: "assistant" }
+      { text: "> explore: 仓库扫描完成 / 已识别 dotnet tool 项目与发布链路", className: "comment" },
+      { text: "> tool: 已加载 package metadata、release tags、workflow 状态", className: "tool" },
+      { text: "assistant: 当前仓库适合直接作为 CLI 产品来迭代，而不是停留在脚本集合。", className: "assistant" },
+      { text: "assistant: 下一步建议同时推进包发布、门户设计和终端体验的统一叙事。", className: "assistant" }
     ],
     [
-      { text: "> plan: 构建终端优先门户 / 保持现有部署流", className: "comment" },
+      { text: "> plan: 重构 pages 门户 / 保持自动部署 / 默认中文双语", className: "comment" },
       { text: "> tool: 正在编辑 docs/index.html、docs/assets/site.css、docs/assets/site.js", className: "tool" },
-      { text: "assistant: 门户会改成更强的运行时视角，带遥测卡片、命令面板和流式终端反馈。", className: "assistant" },
-      { text: "assistant: 动画会保持 GPU 友好，同时尊重 reduced-motion 偏好。", className: "assistant" }
+      { text: "assistant: 门户正在切换成更强的指挥台结构，强调 runtime、signal 和 command surface。", className: "assistant" },
+      { text: "assistant: 语言切换会同步主标题、按钮、终端打字和元信息。", className: "assistant" }
     ],
     [
-      { text: "> release: v1.0.5 已上线 / pages 已同步 / registry 已镜像", className: "comment" },
-      { text: "> memory: profile + project context restored", className: "tool" },
-      { text: "assistant: 运行时健康。你可以继续在终端里驱动任务，而不是在多个工具间来回跳。", className: "assistant" },
-      { text: "assistant: 等待下一条命令。", className: "assistant" }
+      { text: "> ship: NuGet 在线 / GitHub Packages 镜像 / Pages 已部署", className: "comment" },
+      { text: "> memory: profile + daily + project context restored", className: "tool" },
+      { text: "assistant: 运行时健康。现在更像一套可操作的工程控制面，而不是产品说明页。", className: "assistant" },
+      { text: "assistant: 等待下一条终端命令。", className: "assistant" }
     ]
   ],
   en: [
     [
-      { text: "> explore: repo scan complete / .NET tool project detected", className: "comment" },
-      { text: "> tool: loaded package metadata, workflows, release tags", className: "tool" },
-      { text: "assistant: I found an existing publish pipeline and a CLI package targeting dotnet tool distribution.", className: "assistant" },
-      { text: "assistant: Next step is to patch automation, validate the package icon, and publish a tagged release.", className: "assistant" }
+      { text: "> explore: repo scan complete / dotnet tool project and release flow detected", className: "comment" },
+      { text: "> tool: loaded package metadata, release tags, and workflow status", className: "tool" },
+      { text: "assistant: This repository is ready to behave like a product-grade CLI, not just a pile of scripts.", className: "assistant" },
+      { text: "assistant: The next move is to unify package delivery, portal design, and terminal experience into one story.", className: "assistant" }
     ],
     [
-      { text: "> plan: build terminal-first portal / preserve deployment flow", className: "comment" },
+      { text: "> plan: rebuild pages portal / preserve auto deploy / keep bilingual default in zh", className: "comment" },
       { text: "> tool: editing docs/index.html, docs/assets/site.css, docs/assets/site.js", className: "tool" },
-      { text: "assistant: Rewriting the portal with a darker runtime deck, animated telemetry, and streamed terminal feedback.", className: "assistant" },
-      { text: "assistant: Motion stays GPU-friendly and respects reduced-motion preferences.", className: "assistant" }
+      { text: "assistant: The portal is shifting into a control-deck layout centered on runtime, signal, and command surface.", className: "assistant" },
+      { text: "assistant: Language switching will update headings, buttons, terminal typing, and metadata together.", className: "assistant" }
     ],
     [
-      { text: "> release: v1.0.5 package online / pages synced / registry mirrored", className: "comment" },
-      { text: "> memory: profile + project context restored", className: "tool" },
-      { text: "assistant: Runtime healthy. You can keep driving work from the terminal instead of bouncing between tools.", className: "assistant" },
-      { text: "assistant: Ready for the next command.", className: "assistant" }
+      { text: "> ship: NuGet online / GitHub Packages mirrored / Pages deployed", className: "comment" },
+      { text: "> memory: profile + daily + project context restored", className: "tool" },
+      { text: "assistant: Runtime healthy. This now feels closer to an engineering control surface than a generic product page.", className: "assistant" },
+      { text: "assistant: Ready for the next terminal command.", className: "assistant" }
     ]
   ]
 };
@@ -223,7 +260,7 @@ function writeStoredLanguage(language) {
   try {
     localStorage.setItem(storageKey, language);
   } catch {
-    // Ignore storage failures and keep the current in-memory language.
+    // Ignore storage failures.
   }
 }
 
@@ -251,6 +288,10 @@ function applyTranslations(language) {
 
   i18nNodes.forEach((node) => {
     node.textContent = t(node.dataset.i18n, language);
+  });
+
+  i18nHtmlNodes.forEach((node) => {
+    node.innerHTML = t(node.dataset.i18nHtml, language);
   });
 
   i18nAltNodes.forEach((node) => {
@@ -298,7 +339,7 @@ async function playReducedMotionLoop(runId) {
   renderStaticTerminal(index, runId);
 
   while (runId === terminalRunId) {
-    await delay(2400);
+    await delay(2600);
     if (runId !== terminalRunId) return;
 
     typedTerminal.classList.add("is-switching");
@@ -315,7 +356,7 @@ async function typeLine(line, text, runId) {
   for (const character of text) {
     if (runId !== terminalRunId) return false;
     line.textContent += character;
-    await delay(16);
+    await delay(15);
   }
 
   return true;
@@ -354,7 +395,7 @@ async function playTerminalLoop(runId) {
 
         const completed = await typeLine(line, frame.text, runId);
         if (!completed) return;
-        await delay(120);
+        await delay(110);
       }
 
       const cursor = document.createElement("span");
@@ -362,7 +403,7 @@ async function playTerminalLoop(runId) {
       cursor.setAttribute("aria-hidden", "true");
       typedTerminal.appendChild(cursor);
 
-      await delay(900);
+      await delay(980);
       if (runId !== terminalRunId) return;
 
       cursor.remove();
@@ -371,11 +412,11 @@ async function playTerminalLoop(runId) {
         const completed = await eraseLine(lines[index], runId);
         if (!completed) return;
         lines[index].remove();
-        await delay(40);
+        await delay(38);
       }
 
       typedTerminal.classList.add("is-switching");
-      await delay(140);
+      await delay(150);
       typedTerminal.classList.remove("is-switching");
     }
   }

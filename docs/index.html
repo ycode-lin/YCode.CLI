@@ -7,24 +7,26 @@
   <meta
     id="meta-description"
     name="description"
-    content="YCode CLI 是一个终端原生的 AI 编码代理，具备子代理编排、MCP 工具接入、记忆层和技能包加载能力。"
+    content="YCode CLI 是一个终端原生的 AI 编码代理，专为真实仓库工作流设计，具备子代理编排、MCP 工具接入、记忆层和技能包加载能力。"
   >
-  <meta name="theme-color" content="#050816">
+  <meta name="theme-color" content="#07111f">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon-64.png">
   <link rel="apple-touch-icon" href="./assets/icon-256.png">
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700;900&family=Syne:wght@500;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700;900&family=Bricolage+Grotesque:wght@500;700;800&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="./assets/site.css">
 </head>
 <body>
-  <div class="backdrop">
-    <div class="backdrop-mesh"></div>
-    <div class="backdrop-grid"></div>
-    <div class="backdrop-scan"></div>
+  <div class="cosmos" aria-hidden="true">
+    <div class="cosmos-grid"></div>
+    <div class="cosmos-orb cosmos-orb-a"></div>
+    <div class="cosmos-orb cosmos-orb-b"></div>
+    <div class="cosmos-beam"></div>
+    <div class="cosmos-noise"></div>
   </div>
 
   <div class="page-shell">
@@ -47,9 +49,9 @@
         </span>
       </a>
 
-      <div class="topbar-status" data-i18n-aria-label="topbar.statusAria" aria-label="当前发布状态">
+      <div class="status-ribbon" data-i18n-aria-label="topbar.statusAria" aria-label="当前运行状态">
         <span class="status-dot"></span>
-        <span data-i18n="topbar.status">发布通道：v1.0.5 / NuGet 在线 / Pages 已同步</span>
+        <span class="status-copy" data-i18n="topbar.status">主分支在线 / NuGet 已发布 / Pages 已同步 / Runtime 正在运行</span>
       </div>
 
       <div class="topbar-controls">
@@ -59,26 +61,37 @@
         </div>
 
         <nav class="topnav" aria-label="Primary">
-          <a href="https://www.nuget.org/packages/YCode.CLI" data-i18n="nav.nuget">NuGet</a>
-          <a href="https://github.com/ycode-lin/YCode.CLI/releases" data-i18n="nav.releases">发布记录</a>
-          <a href="https://github.com/ycode-lin/YCode.CLI" data-i18n="nav.source">源码仓库</a>
+          <a href="https://www.nuget.org/packages/YCode.CLI" data-i18n="nav.install">安装</a>
+          <a href="https://github.com/ycode-lin/YCode.CLI/releases" data-i18n="nav.releases">版本</a>
+          <a href="https://github.com/ycode-lin/YCode.CLI" data-i18n="nav.source">源码</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero-grid">
+      <section class="hero-frame">
         <article class="hero-copy panel reveal reveal-delay-1">
-          <p class="eyebrow" data-i18n="hero.eyebrow">cli 门户 / 编排 / agent runtime</p>
-          <h1 data-i18n="hero.title">把代码操作成一套正在运行的终端系统，而不是静态聊天框。</h1>
+          <div class="hero-kicker">
+            <span class="eyebrow" data-i18n="hero.eyebrow">MISSION CONSOLE</span>
+            <span class="hero-kicker-line"></span>
+          </div>
+
+          <h1 data-i18n-html="hero.title">给你的仓库一块真正可操作的 <span>AI 终端甲板</span>。</h1>
+
           <p class="hero-text" data-i18n="hero.body">
-            YCode CLI 面向真实仓库工作流构建，把 explore、plan、code 拆给不同子代理，通过 MCP
-            扩展操作面，并用记忆层和技能包维持长链路任务的一致性。
+            YCode CLI 不是把聊天框搬进命令行，而是把探索、规划、改码、发布接到一条能持续运行的仓库操作链路里。
           </p>
 
+          <div class="hero-strip">
+            <span class="hero-strip-item" data-i18n="hero.strip1">Subagents</span>
+            <span class="hero-strip-item" data-i18n="hero.strip2">MCP Tools</span>
+            <span class="hero-strip-item" data-i18n="hero.strip3">Memory Layers</span>
+            <span class="hero-strip-item" data-i18n="hero.strip4">Skill Packs</span>
+          </div>
+
           <div class="hero-actions">
-            <a class="button button-primary" href="https://www.nuget.org/packages/YCode.CLI" data-i18n="hero.install">安装全局工具</a>
-            <a class="button button-secondary" href="https://github.com/ycode-lin/YCode.CLI/releases/tag/v1.0.5" data-i18n="hero.release">打开最新版本</a>
+            <a class="button button-primary" href="https://www.nuget.org/packages/YCode.CLI" data-i18n="hero.install">立即安装</a>
+            <a class="button button-secondary" href="https://github.com/ycode-lin/YCode.CLI/releases/tag/v1.0.5" data-i18n="hero.release">查看最新版本</a>
           </div>
 
           <div class="command-bar">
@@ -87,182 +100,201 @@
             <button id="copy-command" type="button" data-i18n="copy.default">复制</button>
           </div>
 
-          <div class="metric-grid">
-            <article class="metric-card">
-              <span class="metric-label" data-i18n="metrics.execution.label">执行模型</span>
-              <strong data-i18n="metrics.execution.title">Explore / Plan / Code</strong>
-              <p data-i18n="metrics.execution.body">子代理让上下文更小，推理和决策也更清晰。</p>
+          <div class="signal-cluster">
+            <article class="signal-card">
+              <span class="signal-label" data-i18n="hero.stat1Label">运行模型</span>
+              <strong data-i18n="hero.stat1Value">Explore / Plan / Code</strong>
+              <p data-i18n="hero.stat1Body">把仓库工作拆进更清晰的执行轨道。</p>
             </article>
-            <article class="metric-card">
-              <span class="metric-label" data-i18n="metrics.tools.label">工具表面</span>
-              <strong data-i18n="metrics.tools.title">MCP + 文件 + 任务</strong>
-              <p data-i18n="metrics.tools.body">不是只靠提示词，而是用结构化操作完成工作。</p>
-            </article>
-            <article class="metric-card">
-              <span class="metric-label" data-i18n="metrics.state.label">状态层</span>
-              <strong data-i18n="metrics.state.title">Memory + Skills</strong>
-              <p data-i18n="metrics.state.body">项目知识不会困在一次孤立会话里。</p>
+            <article class="signal-card signal-card-accent">
+              <span class="signal-label" data-i18n="hero.stat2Label">能力面</span>
+              <strong data-i18n="hero.stat2Value">Files / Tasks / MCP</strong>
+              <p data-i18n="hero.stat2Body">从命令到动作，不停留在提示词层面。</p>
             </article>
           </div>
         </article>
 
-        <article class="terminal-stack reveal reveal-delay-2">
+        <aside class="mission-deck reveal reveal-delay-2">
           <section class="terminal-shell panel">
             <div class="terminal-topline">
               <span class="terminal-led is-red"></span>
               <span class="terminal-led is-amber"></span>
               <span class="terminal-led is-green"></span>
-              <span class="terminal-title" data-i18n="terminal.title">live session / ycode runtime</span>
+              <span class="terminal-title" data-i18n="terminal.title">live ops / ycode runtime</span>
             </div>
 
             <div class="terminal-body">
               <div class="terminal-prelude">
-                <span class="terminal-line is-dim" data-i18n="terminal.prelude1">$ ycode "检查仓库、修补 workflow、发布包"</span>
-                <span class="terminal-line is-soft" data-i18n="terminal.prelude2">[agent] 正在加载记忆 · 解析技能包 · 准备工具</span>
+                <span class="terminal-line is-dim" data-i18n="terminal.prelude1">$ ycode "检查仓库、补丁 workflow、发包、更新站点"</span>
+                <span class="terminal-line is-soft" data-i18n="terminal.prelude2">[runtime] 正在恢复上下文、挂载工具链、准备执行序列</span>
               </div>
               <div id="typed-terminal" class="typed-terminal" aria-live="polite"></div>
             </div>
           </section>
 
-          <section class="telemetry panel">
-            <div class="telemetry-header">
-              <p class="eyebrow" data-i18n="telemetry.eyebrow">runtime telemetry</p>
-              <span class="telemetry-pill" data-i18n="telemetry.active">active</span>
-            </div>
+          <section class="ops-grid">
+            <article class="ops-card panel">
+              <div class="ops-head">
+                <p class="eyebrow" data-i18n="ops.streamLabel">release stream</p>
+                <span class="ops-pill" data-i18n="ops.streamState">热</span>
+              </div>
+              <ul class="ops-list">
+                <li><span data-i18n="ops.item1Key">包仓</span><strong data-i18n="ops.item1Value">NuGet.org</strong></li>
+                <li><span data-i18n="ops.item2Key">镜像</span><strong data-i18n="ops.item2Value">GitHub Packages</strong></li>
+                <li><span data-i18n="ops.item3Key">部署</span><strong data-i18n="ops.item3Value">Pages Auto Deploy</strong></li>
+              </ul>
+            </article>
 
-            <div class="telemetry-list">
-              <div class="telemetry-item">
-                <span data-i18n="telemetry.agent">代理切换</span>
-                <div class="meter"><span class="meter-fill meter-fill-a"></span></div>
+            <article class="ops-card panel telemetry-card">
+              <div class="ops-head">
+                <p class="eyebrow" data-i18n="telemetry.eyebrow">runtime telemetry</p>
+                <span class="ops-pill ops-pill-alt" data-i18n="telemetry.active">active</span>
               </div>
-              <div class="telemetry-item">
-                <span data-i18n="telemetry.tool">工具执行</span>
-                <div class="meter"><span class="meter-fill meter-fill-b"></span></div>
+              <div class="telemetry-list">
+                <div class="telemetry-item">
+                  <span data-i18n="telemetry.agent">代理切换</span>
+                  <div class="meter"><span class="meter-fill meter-fill-a"></span></div>
+                </div>
+                <div class="telemetry-item">
+                  <span data-i18n="telemetry.tool">工具执行</span>
+                  <div class="meter"><span class="meter-fill meter-fill-b"></span></div>
+                </div>
+                <div class="telemetry-item">
+                  <span data-i18n="telemetry.memory">记忆召回</span>
+                  <div class="meter"><span class="meter-fill meter-fill-c"></span></div>
+                </div>
               </div>
-              <div class="telemetry-item">
-                <span data-i18n="telemetry.memory">记忆召回</span>
-                <div class="meter"><span class="meter-fill meter-fill-c"></span></div>
-              </div>
-            </div>
+            </article>
           </section>
+        </aside>
+      </section>
+
+      <section class="systems-band reveal reveal-delay-3">
+        <article class="system-panel panel system-panel-main">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="systems.eyebrow">system lanes</p>
+            <h2 data-i18n="systems.title">把仓库里的关键动作排成一条能连贯推进的控制面。</h2>
+          </div>
+          <div class="lane-stack">
+            <div class="lane-item">
+              <span class="lane-index">01</span>
+              <div>
+                <h3 data-i18n="systems.lane1Title">发现层</h3>
+                <p data-i18n="systems.lane1Body">扫描代码树、workflow、tags、packages，把现状提炼成可决策的仓库图谱。</p>
+              </div>
+            </div>
+            <div class="lane-item">
+              <span class="lane-index">02</span>
+              <div>
+                <h3 data-i18n="systems.lane2Title">规划层</h3>
+                <p data-i18n="systems.lane2Body">把多步任务拆成块，让自动化、文档、UI、发布链路能协同演进。</p>
+              </div>
+            </div>
+            <div class="lane-item">
+              <span class="lane-index">03</span>
+              <div>
+                <h3 data-i18n="systems.lane3Title">执行层</h3>
+                <p data-i18n="systems.lane3Body">直接编辑文件、调用工具、打标签、发版，而不是停在分析报告里。</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="system-panel panel system-panel-side">
+          <div class="stack-badge">
+            <span data-i18n="systems.sideBadge">agent stack</span>
+          </div>
+          <div class="stack-grid">
+            <div class="stack-cell">
+              <span data-i18n="systems.cell1Label">route</span>
+              <strong data-i18n="systems.cell1Value">Subagents</strong>
+            </div>
+            <div class="stack-cell">
+              <span data-i18n="systems.cell2Label">extend</span>
+              <strong data-i18n="systems.cell2Value">MCP</strong>
+            </div>
+            <div class="stack-cell">
+              <span data-i18n="systems.cell3Label">retain</span>
+              <strong data-i18n="systems.cell3Value">Memory</strong>
+            </div>
+            <div class="stack-cell">
+              <span data-i18n="systems.cell4Label">repeat</span>
+              <strong data-i18n="systems.cell4Value">Skills</strong>
+            </div>
+          </div>
+          <p class="stack-copy" data-i18n="systems.sideBody">你得到的不是“会回答问题”的模型，而是一套更像工程控制面的终端执行器。</p>
         </article>
       </section>
 
-      <section class="section-grid">
-        <article class="panel capabilities reveal reveal-delay-3">
+      <section class="workflow-band reveal reveal-delay-4">
+        <article class="workflow-panel panel">
           <div class="section-head">
-            <p class="eyebrow" data-i18n="capabilities.eyebrow">capabilities</p>
-            <h2 data-i18n="capabilities.title">它为需要结构化动作的仓库操作而生，不是只会“聊得像对”。</h2>
+            <p class="eyebrow" data-i18n="workflow.eyebrow">command scenarios</p>
+            <h2 data-i18n="workflow.title">直接从命令行发起真正的仓库任务。</h2>
           </div>
 
-          <div class="capability-list">
-            <div class="capability-item">
-              <span class="capability-index">01</span>
-              <div>
-                <h3 data-i18n="capabilities.route.title">子代理路由</h3>
-                <p data-i18n="capabilities.route.body">把发现、规划和代码执行拆到不同职责轨道上。</p>
-              </div>
-            </div>
-            <div class="capability-item">
-              <span class="capability-index">02</span>
-              <div>
-                <h3 data-i18n="capabilities.mcp.title">MCP 集成</h3>
-                <p data-i18n="capabilities.mcp.body">把外部能力面稳定接进 CLI，而不是压扁成纯文本。</p>
-              </div>
-            </div>
-            <div class="capability-item">
-              <span class="capability-index">03</span>
-              <div>
-                <h3 data-i18n="capabilities.memory.title">记忆层</h3>
-                <p data-i18n="capabilities.memory.body">在更长的工程会话里保留 profile、daily 和 project 上下文。</p>
-              </div>
-            </div>
-            <div class="capability-item">
-              <span class="capability-index">04</span>
-              <div>
-                <h3 data-i18n="capabilities.skills.title">技能加载</h3>
-                <p data-i18n="capabilities.skills.body">用可复用技能包标准化发版、评审、UI 和编码流程。</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="panel workflow reveal reveal-delay-4">
-          <div class="section-head">
-            <p class="eyebrow" data-i18n="workflow.eyebrow">workflow deck</p>
-            <h2 data-i18n="workflow.title">典型命令界面</h2>
-          </div>
-
-          <div class="workflow-commands">
-            <div class="workflow-row">
-              <span class="prompt">$</span>
+          <div class="workflow-grid">
+            <div class="workflow-card">
+              <span class="workflow-tag" data-i18n="workflow.card1Tag">release</span>
               <code data-i18n="workflow.command1">ycode "检查仓库并起草发版计划"</code>
+              <p data-i18n="workflow.card1Body">先拉出当前版本状态、Secrets、workflow 风险点，再决定下一步。</p>
             </div>
-            <div class="workflow-row">
-              <span class="prompt">$</span>
+            <div class="workflow-card workflow-card-strong">
+              <span class="workflow-tag" data-i18n="workflow.card2Tag">ship</span>
               <code data-i18n="workflow.command2">ycode "接好 GitHub Actions 并发布到 nuget.org"</code>
+              <p data-i18n="workflow.card2Body">自动化链路、包元数据、tag 发布和 release 资产可以一次串起来。</p>
             </div>
-            <div class="workflow-row">
-              <span class="prompt">$</span>
+            <div class="workflow-card">
+              <span class="workflow-tag" data-i18n="workflow.card3Tag">design</span>
               <code data-i18n="workflow.command3">ycode "把 pages 门户优化成终端化体验"</code>
-            </div>
-          </div>
-
-          <div class="pipeline">
-            <div class="pipeline-node">
-              <span data-i18n="workflow.read.label">读取</span>
-              <strong data-i18n="workflow.read.title">仓库图谱</strong>
-            </div>
-            <div class="pipeline-line"></div>
-            <div class="pipeline-node">
-              <span data-i18n="workflow.reason.label">推理</span>
-              <strong data-i18n="workflow.reason.title">计划块</strong>
-            </div>
-            <div class="pipeline-line"></div>
-            <div class="pipeline-node">
-              <span data-i18n="workflow.act.label">执行</span>
-              <strong data-i18n="workflow.act.title">补丁 + 发布</strong>
+              <p data-i18n="workflow.card3Body">前端也能走同一套工作流，不用跳出仓库换上下文。</p>
             </div>
           </div>
         </article>
       </section>
 
-      <section class="dock-grid reveal reveal-delay-5">
-        <a class="panel dock-card" href="https://www.nuget.org/packages/YCode.CLI">
-          <p class="eyebrow" data-i18n="dock.install.eyebrow">install</p>
-          <h3 data-i18n="dock.install.title">NuGet 包</h3>
-          <p data-i18n="dock.install.body">全局安装、查看版本，并检查已发布的包元数据。</p>
+      <section class="launch-band reveal reveal-delay-5">
+        <a class="launch-card panel" href="https://www.nuget.org/packages/YCode.CLI">
+          <p class="eyebrow" data-i18n="launch.installEyebrow">install node</p>
+          <h3 data-i18n="launch.installTitle">NuGet 包</h3>
+          <p data-i18n="launch.installBody">安装全局工具，查看版本、依赖和发布记录。</p>
+          <span class="launch-link" data-i18n="launch.open">打开入口</span>
         </a>
-        <a class="panel dock-card" href="https://github.com/ycode-lin/YCode.CLI/releases">
-          <p class="eyebrow" data-i18n="dock.release.eyebrow">artifacts</p>
-          <h3 data-i18n="dock.release.title">Releases</h3>
-          <p data-i18n="dock.release.body">跟踪 tag 构建、发布资产和自动化输出。</p>
+        <a class="launch-card panel" href="https://github.com/ycode-lin/YCode.CLI/releases">
+          <p class="eyebrow" data-i18n="launch.releaseEyebrow">artifact log</p>
+          <h3 data-i18n="launch.releaseTitle">Releases</h3>
+          <p data-i18n="launch.releaseBody">追踪 tag、release 资产和每次自动发布的交付结果。</p>
+          <span class="launch-link" data-i18n="launch.open">打开入口</span>
         </a>
-        <a class="panel dock-card" href="https://github.com/ycode-lin/YCode.CLI">
-          <p class="eyebrow" data-i18n="dock.source.eyebrow">source</p>
-          <h3 data-i18n="dock.source.title">仓库源码</h3>
-          <p data-i18n="dock.source.body">浏览实现细节、当前 workflow 和代码历史。</p>
+        <a class="launch-card panel" href="https://github.com/ycode-lin/YCode.CLI">
+          <p class="eyebrow" data-i18n="launch.sourceEyebrow">source graph</p>
+          <h3 data-i18n="launch.sourceTitle">源码仓库</h3>
+          <p data-i18n="launch.sourceBody">查看实现细节、问题修复和工作流演进过程。</p>
+          <span class="launch-link" data-i18n="launch.open">打开入口</span>
         </a>
-        <a class="panel dock-card" href="https://github.com/users/ycode-lin/packages?repo_name=YCode.CLI">
-          <p class="eyebrow" data-i18n="dock.packages.eyebrow">mirror</p>
-          <h3 data-i18n="dock.packages.title">GitHub Packages</h3>
-          <p data-i18n="dock.packages.body">查看由 release workflow 同步发布的镜像仓库。</p>
+        <a class="launch-card panel" href="https://github.com/users/ycode-lin/packages?repo_name=YCode.CLI">
+          <p class="eyebrow" data-i18n="launch.mirrorEyebrow">mirror registry</p>
+          <h3 data-i18n="launch.mirrorTitle">GitHub Packages</h3>
+          <p data-i18n="launch.mirrorBody">查看与 release workflow 同步的镜像包仓。</p>
+          <span class="launch-link" data-i18n="launch.open">打开入口</span>
         </a>
       </section>
 
-      <section class="panel chart-panel reveal reveal-delay-6">
-        <div class="section-head">
-          <p class="eyebrow" data-i18n="chart.eyebrow">signal</p>
-          <h2 data-i18n="chart.title">仓库热度轨迹</h2>
-        </div>
+      <section class="signal-band reveal reveal-delay-6">
+        <article class="signal-panel panel">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="chart.eyebrow">public signal</p>
+            <h2 data-i18n="chart.title">仓库增长曲线不是装饰，它是终端系统被持续使用的外部回声。</h2>
+          </div>
 
-        <div class="chart-frame">
-          <img
-            src="https://api.star-history.com/svg?repos=ycode-lin/YCode.CLI&type=Date"
-            data-i18n-alt="chart.alt"
-            alt="YCode CLI 的 Star History 图表"
-          >
-        </div>
+          <div class="chart-frame">
+            <img
+              src="https://api.star-history.com/svg?repos=ycode-lin/YCode.CLI&type=Date"
+              data-i18n-alt="chart.alt"
+              alt="YCode CLI 的 Star History 图表"
+            >
+          </div>
+        </article>
       </section>
     </main>
 
