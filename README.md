@@ -102,7 +102,7 @@ Workflow 默认读取仓库里的 `NUGET_API_KEY` secret。
 - [Kode 项目](https://github.com/shareAI-lab/Kode) (Python实现的参考)
 
 ## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=ycode-lin%2Fycode.cli&type=Date)](https://star-history.com/#ycode-lin/YCode.CLI&Date)
+![Star History Chart](https://api.star-history.com/svg?repos=ycode-lin%2Fycode.cli&type=Date)
 
 ## 许可证
 MIT License
