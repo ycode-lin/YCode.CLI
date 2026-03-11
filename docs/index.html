@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YCode CLI</title>
+  <meta
+    name="description"
+    content="YCode CLI is a .NET 10 coding agent for your repository, with subagents, MCP tools, memory management, and skill loading."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./assets/site.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Repository-native coding agent</p>
+        <h1>YCode CLI</h1>
+        <p class="hero-text">
+          A .NET 10 command line agent built for real repository work. YCode combines
+          subagents, MCP tools, memory layers, and skill loading into one terminal-first flow.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://www.nuget.org/packages/YCode.CLI">Install from NuGet</a>
+          <a class="button button-secondary" href="https://github.com/ycode-lin/YCode.CLI">View Source</a>
+        </div>
+
+        <div class="install-strip">
+          <span class="install-label">Install</span>
+          <code id="install-command">dotnet tool install --global YCode.CLI</code>
+          <button id="copy-command" type="button">Copy</button>
+        </div>
+      </div>
+
+      <aside class="hero-panel">
+        <div class="panel-topline">Why it stands out</div>
+        <ul class="signal-list">
+          <li>Subagents split exploration, planning, and code execution.</li>
+          <li>MCP tools extend filesystem and system capabilities.</li>
+          <li>Memory and skills make repeated work faster and more structured.</li>
+        </ul>
+
+        <div class="release-card">
+          <span class="release-label">Current package</span>
+          <strong>v1.0.4</strong>
+          <a href="https://github.com/ycode-lin/YCode.CLI/releases/tag/v1.0.4">Open release</a>
+        </div>
+      </aside>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">Core system</p>
+          <h2>Designed for repository work, not chat demos</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-index">01</span>
+            <h3>Subagent routing</h3>
+            <p>Separate explore, plan, and code roles to reduce context pollution and keep terminal work deliberate.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-index">02</span>
+            <h3>MCP integration</h3>
+            <p>Extend the CLI with Model Context Protocol tools so file, task, and system operations stay composable.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-index">03</span>
+            <h3>Memory layers</h3>
+            <p>Profile, daily, and project memory keep state across longer sessions and recurring tasks.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-index">04</span>
+            <h3>Skill loading</h3>
+            <p>YAML and Markdown skill packs give the agent structured behavior without hard-coding every workflow.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-diagram">
+        <div class="section-heading">
+          <p class="section-kicker">Runtime map</p>
+          <h2>One orchestration layer, multiple capability surfaces</h2>
+        </div>
+
+        <div class="diagram-card">
+          <div class="diagram-column">
+            <span class="diagram-label">Input</span>
+            <strong>CLI UI</strong>
+            <p>User prompt, command invocation, and streaming console interaction.</p>
+          </div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-column">
+            <span class="diagram-label">Control</span>
+            <strong>Program + DI</strong>
+            <p>Agent registration, service wiring, context management, and execution flow.</p>
+          </div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-column">
+            <span class="diagram-label">Execution</span>
+            <strong>Managers + Tools</strong>
+            <p>Agent catalog, memories, skills, todo flow, file ops, and MCP-backed tool execution.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">Navigation</p>
+          <h2>Where to go next</h2>
+        </div>
+
+        <div class="link-grid">
+          <a class="link-card" href="https://www.nuget.org/packages/YCode.CLI">
+            <span>Package</span>
+            <strong>NuGet</strong>
+            <p>Install the global tool and track package versions.</p>
+          </a>
+          <a class="link-card" href="https://github.com/ycode-lin/YCode.CLI/releases">
+            <span>Artifacts</span>
+            <strong>Releases</strong>
+            <p>See packaged builds and release notes.</p>
+          </a>
+          <a class="link-card" href="https://github.com/ycode-lin/YCode.CLI">
+            <span>Source</span>
+            <strong>Repository</strong>
+            <p>Browse code, issues, and contribution history.</p>
+          </a>
+          <a class="link-card" href="https://github.com/users/ycode-lin/packages?repo_name=YCode.CLI">
+            <span>Registry</span>
+            <strong>GitHub Packages</strong>
+            <p>Inspect the package mirror published from the release workflow.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">Signal</p>
+          <h2>Repository activity</h2>
+        </div>
+
+        <a class="history-panel" href="https://star-history.com/#ycode-lin/YCode.CLI&Date">
+          <img
+            src="https://api.star-history.com/svg?repos=ycode-lin%2Fycode.cli&type=Date"
+            alt="Star History chart for YCode CLI"
+          >
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built for terminal-first coding workflows.</p>
+      <p><span id="year"></span> YCode CLI</p>
+    </footer>
+  </div>
+
+  <script src="./assets/site.js"></script>
+</body>
+</html>

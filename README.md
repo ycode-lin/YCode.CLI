@@ -1,5 +1,10 @@
 # YCode CLI
 
+[![NuGet Version](https://img.shields.io/nuget/v/YCode.CLI?style=for-the-badge&label=NuGet)](https://www.nuget.org/packages/YCode.CLI)
+[![GitHub Release](https://img.shields.io/github/v/release/ycode-lin/YCode.CLI?style=for-the-badge&label=Release)](https://github.com/ycode-lin/YCode.CLI/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/ycode-lin/YCode.CLI?style=for-the-badge&label=Stars)](https://github.com/ycode-lin/YCode.CLI/stargazers)
+[![Project Portal](https://img.shields.io/badge/Portal-GitHub%20Pages-0d0d0d?style=for-the-badge)](https://ycode-lin.github.io/YCode.CLI/)
+
 .NET 10 的命令行 AI 代理项目，结合 Subagent、MCP 工具、记忆管理与技能加载，用于学习与二次扩展。
 
 ## 特性
@@ -30,6 +35,14 @@
  # 可选（Context7 MCP）
  YCODE_CONTEXT7=your_context7_api_key
 ```
+
+## 门户页面
+项目门户页会发布到 GitHub Pages：
+
+- Portal: https://ycode-lin.github.io/YCode.CLI/
+- NuGet: https://www.nuget.org/packages/YCode.CLI
+- Releases: https://github.com/ycode-lin/YCode.CLI/releases
+- Repository: https://github.com/ycode-lin/YCode.CLI
 
 ## 设计分层
 ```mermaid
@@ -89,7 +102,7 @@ Workflow 默认读取仓库里的 `NUGET_API_KEY` secret。
 - [Kode 项目](https://github.com/shareAI-lab/Kode) (Python实现的参考)
 
 ## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=ycode-lin/YCode.CLI&type=Date)](https://star-history.com/#ycode-lin/YCode.CLI&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=ycode-lin%2Fycode.cli&type=Date)](https://star-history.com/#ycode-lin/YCode.CLI&Date)
 
 ## 许可证
 MIT License
