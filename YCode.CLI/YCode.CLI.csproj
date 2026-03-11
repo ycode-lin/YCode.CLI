@@ -16,6 +16,7 @@
 		<Description>YCode is an AI-powered coding agent that operates inside your repository. It provides intelligent code assistance, file operations, and multi-step task management.</Description>
 		<PackageTags>ai;coding-agent;cli;dotnet-tool;developer-tools</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/ycode-lin/YCode.CLI</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ycode-lin/YCode.CLI</RepositoryUrl>
@@ -35,6 +36,7 @@
 
 	<ItemGroup>
 		<None Include="../README.md" Pack="true" PackagePath="\" />
+		<None Include="icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

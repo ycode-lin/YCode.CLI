@@ -102,6 +102,15 @@ code {
   background: linear-gradient(160deg, rgba(255, 250, 241, 0.9), rgba(255, 244, 226, 0.85));
 }
 
+.hero-logo {
+  display: block;
+  width: 92px;
+  height: 92px;
+  margin-bottom: 12px;
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(17, 17, 17, 0.12);
+}
+
 .eyebrow,
 .section-kicker,
 .panel-topline,
