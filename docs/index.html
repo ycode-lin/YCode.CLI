@@ -8,30 +8,38 @@
     name="description"
     content="YCode CLI is a terminal-first AI coding agent with subagents, MCP tools, memory layers, and skill loading."
   >
-  <meta name="theme-color" content="#07110e">
+  <meta name="theme-color" content="#050816">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon-64.png">
   <link rel="apple-touch-icon" href="./assets/icon-256.png">
   <link
-    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@500;700;800&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="./assets/site.css">
 </head>
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="grid" aria-hidden="true"></div>
+  <div class="backdrop">
+    <div class="backdrop-mesh"></div>
+    <div class="backdrop-grid"></div>
+    <div class="backdrop-scan"></div>
+  </div>
 
   <div class="page-shell">
-    <header class="topbar">
+    <header class="topbar panel reveal">
       <a class="brand" href="https://github.com/ycode-lin/YCode.CLI" aria-label="YCode CLI repository">
         <img class="brand-icon" src="./assets/icon-256.png" alt="YCode CLI icon">
-        <span class="brand-mark">
+        <span class="brand-copy">
           <strong>YCode CLI</strong>
           <span>terminal-native coding agent</span>
         </span>
       </a>
+
+      <div class="topbar-status" aria-label="Current package status">
+        <span class="status-dot"></span>
+        <span>release channel: v1.0.5 / nuget online / pages synced</span>
+      </div>
 
       <nav class="topnav" aria-label="Primary">
         <a href="https://www.nuget.org/packages/YCode.CLI">NuGet</a>
@@ -41,67 +49,93 @@
     </header>
 
     <main>
-      <section class="hero-panel panel">
-        <div class="hero-copy">
-          <p class="eyebrow">cli portal / ai agent / .net 10</p>
-          <h1>Ship code from a terminal that feels alive.</h1>
+      <section class="hero-grid">
+        <article class="hero-copy panel reveal reveal-delay-1">
+          <p class="eyebrow">cli portal / orchestration / agent runtime</p>
+          <h1>Operate code like a live terminal system, not a static chatbot.</h1>
           <p class="hero-text">
-            YCode CLI is a repository-native coding agent built for real terminal work:
-            subagents for explore-plan-code loops, MCP tooling, layered memory, and skills
-            that keep repetitive workflows sharp.
+            YCode CLI is built for repository work. It routes explore, plan, and code phases
+            across subagents, extends operations through MCP tools, and keeps long-running work
+            coherent with memory and skill packs.
           </p>
 
           <div class="hero-actions">
             <a class="button button-primary" href="https://www.nuget.org/packages/YCode.CLI">Install Global Tool</a>
-            <a class="button button-secondary" href="https://github.com/ycode-lin/YCode.CLI/releases/tag/v1.0.5">Latest Release</a>
+            <a class="button button-secondary" href="https://github.com/ycode-lin/YCode.CLI/releases/tag/v1.0.5">Open Latest Release</a>
           </div>
 
           <div class="command-bar">
-            <span class="command-label">install</span>
+            <span class="command-label">bootstrap</span>
             <code id="install-command">dotnet tool install --global YCode.CLI</code>
             <button id="copy-command" type="button">Copy</button>
           </div>
 
-          <div class="status-grid">
-            <article class="status-card">
-              <span class="status-label">Package</span>
-              <strong>v1.0.5</strong>
-              <p>Published to NuGet and mirrored to GitHub Packages.</p>
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">Execution Model</span>
+              <strong>Explore / Plan / Code</strong>
+              <p>Subagents keep context smaller and decisions more legible.</p>
             </article>
-            <article class="status-card">
-              <span class="status-label">Runtime</span>
-              <strong>Subagents</strong>
-              <p>Explore, plan, and code tracks split context instead of overloading one agent.</p>
+            <article class="metric-card">
+              <span class="metric-label">Tool Surface</span>
+              <strong>MCP + Files + Tasks</strong>
+              <p>Structured operations instead of prompt-only tricks.</p>
             </article>
-            <article class="status-card">
-              <span class="status-label">Ops</span>
-              <strong>MCP + Memory</strong>
-              <p>Tool extension, skills, and multi-layer memory are built into the workflow.</p>
+            <article class="metric-card">
+              <span class="metric-label">State</span>
+              <strong>Memory + Skills</strong>
+              <p>Project knowledge survives beyond one isolated session.</p>
             </article>
           </div>
-        </div>
+        </article>
 
-        <div class="terminal-shell panel">
-          <div class="terminal-topline">
-            <span class="terminal-led is-red"></span>
-            <span class="terminal-led is-amber"></span>
-            <span class="terminal-led is-green"></span>
-            <span class="terminal-title">ycode session / interactive agent runtime</span>
-          </div>
+        <article class="terminal-stack reveal reveal-delay-2">
+          <section class="terminal-shell panel">
+            <div class="terminal-topline">
+              <span class="terminal-led is-red"></span>
+              <span class="terminal-led is-amber"></span>
+              <span class="terminal-led is-green"></span>
+              <span class="terminal-title">live session / ycode runtime</span>
+            </div>
 
-          <div class="terminal-body">
-            <div class="terminal-line is-dim">$ ycode "plan a release workflow and publish the package"</div>
-            <div class="terminal-line terminal-thinking">[agent] reading repo · loading memory · resolving skills</div>
-            <div id="typed-terminal" class="typed-terminal" aria-live="polite"></div>
-          </div>
-        </div>
+            <div class="terminal-body">
+              <div class="terminal-prelude">
+                <span class="terminal-line is-dim">$ ycode "inspect repo, patch workflow, publish package"</span>
+                <span class="terminal-line is-soft">[agent] loading memory · resolving skill packs · preparing tools</span>
+              </div>
+              <div id="typed-terminal" class="typed-terminal" aria-live="polite"></div>
+            </div>
+          </section>
+
+          <section class="telemetry panel">
+            <div class="telemetry-header">
+              <p class="eyebrow">runtime telemetry</p>
+              <span class="telemetry-pill">active</span>
+            </div>
+
+            <div class="telemetry-list">
+              <div class="telemetry-item">
+                <span>agent switch</span>
+                <div class="meter"><span class="meter-fill meter-fill-a"></span></div>
+              </div>
+              <div class="telemetry-item">
+                <span>tool execution</span>
+                <div class="meter"><span class="meter-fill meter-fill-b"></span></div>
+              </div>
+              <div class="telemetry-item">
+                <span>memory recall</span>
+                <div class="meter"><span class="meter-fill meter-fill-c"></span></div>
+              </div>
+            </div>
+          </section>
+        </article>
       </section>
 
       <section class="section-grid">
-        <article class="panel feature-panel">
+        <article class="panel capabilities reveal reveal-delay-3">
           <div class="section-head">
             <p class="eyebrow">capabilities</p>
-            <h2>Built for terminal-first execution, not generic chat.</h2>
+            <h2>Made for repo operations that need structure, not vibe-only prompting.</h2>
           </div>
 
           <div class="capability-list">
@@ -109,99 +143,97 @@
               <span class="capability-index">01</span>
               <div>
                 <h3>Subagent routing</h3>
-                <p>Deliberately split explore, plan, and code work so each phase stays legible.</p>
+                <p>Split discovery, planning, and code execution into specialized tracks.</p>
               </div>
             </div>
             <div class="capability-item">
               <span class="capability-index">02</span>
               <div>
-                <h3>MCP tooling</h3>
-                <p>Expose file and system operations through structured tools instead of prompt hacks.</p>
+                <h3>MCP integration</h3>
+                <p>Plug external capability surfaces into the CLI without flattening them into plain text.</p>
               </div>
             </div>
             <div class="capability-item">
               <span class="capability-index">03</span>
               <div>
                 <h3>Memory layers</h3>
-                <p>Carry profile, daily, and project context across longer coding sessions.</p>
+                <p>Carry profile, daily, and project context across longer engineering sessions.</p>
               </div>
             </div>
             <div class="capability-item">
               <span class="capability-index">04</span>
               <div>
-                <h3>Skill packs</h3>
-                <p>Load YAML and Markdown skill packs to sharpen repeatable engineering workflows.</p>
+                <h3>Skill loading</h3>
+                <p>Use repeatable skill packs to standardize release, review, UI, and coding workflows.</p>
               </div>
             </div>
           </div>
         </article>
 
-        <article class="panel command-panel">
+        <article class="panel workflow reveal reveal-delay-4">
           <div class="section-head">
-            <p class="eyebrow">workflow</p>
+            <p class="eyebrow">workflow deck</p>
             <h2>Typical command surface</h2>
           </div>
 
-          <div class="command-stack">
-            <div class="command-row">
+          <div class="workflow-commands">
+            <div class="workflow-row">
               <span class="prompt">$</span>
               <code>ycode "inspect the repo and draft a release plan"</code>
             </div>
-            <div class="command-row">
+            <div class="workflow-row">
               <span class="prompt">$</span>
               <code>ycode "wire GitHub Actions and publish to nuget.org"</code>
             </div>
-            <div class="command-row">
+            <div class="workflow-row">
               <span class="prompt">$</span>
-              <code>ycode "redesign the portal with a terminal UI"</code>
+              <code>ycode "optimize the pages portal with terminal UX"</code>
             </div>
           </div>
 
-          <div class="ops-grid">
-            <div class="ops-card">
-              <span>Agent catalog</span>
-              <strong>subagent switching</strong>
+          <div class="pipeline">
+            <div class="pipeline-node">
+              <span>read</span>
+              <strong>repo graph</strong>
             </div>
-            <div class="ops-card">
-              <span>Tools</span>
-              <strong>mcp / file / task</strong>
+            <div class="pipeline-line"></div>
+            <div class="pipeline-node">
+              <span>reason</span>
+              <strong>plan blocks</strong>
             </div>
-            <div class="ops-card">
-              <span>State</span>
-              <strong>memory / todo / skills</strong>
-            </div>
-            <div class="ops-card">
-              <span>Output</span>
-              <strong>streamed terminal UX</strong>
+            <div class="pipeline-line"></div>
+            <div class="pipeline-node">
+              <span>act</span>
+              <strong>patch + ship</strong>
             </div>
           </div>
         </article>
       </section>
 
-      <section class="dock-grid">
+      <section class="dock-grid reveal reveal-delay-5">
         <a class="panel dock-card" href="https://www.nuget.org/packages/YCode.CLI">
           <p class="eyebrow">install</p>
           <h3>NuGet Package</h3>
-          <p>Grab the tool, inspect versions, and install globally.</p>
+          <p>Install globally, review versions, and see the published package metadata.</p>
         </a>
         <a class="panel dock-card" href="https://github.com/ycode-lin/YCode.CLI/releases">
           <p class="eyebrow">artifacts</p>
           <h3>Releases</h3>
-          <p>See packaged assets, version notes, and published builds.</p>
+          <p>Track tagged builds, release assets, and automation output.</p>
         </a>
         <a class="panel dock-card" href="https://github.com/ycode-lin/YCode.CLI">
           <p class="eyebrow">source</p>
           <h3>Repository</h3>
-          <p>Browse implementation details, workflows, and project history.</p>
+          <p>Browse implementation details, current workflows, and code history.</p>
         </a>
         <a class="panel dock-card" href="https://github.com/users/ycode-lin/packages?repo_name=YCode.CLI">
           <p class="eyebrow">mirror</p>
           <h3>GitHub Packages</h3>
-          <p>Track the mirrored package registry published from release automation.</p>
+          <p>Inspect the mirrored package registry published from the release workflow.</p>
         </a>
       </section>
 
-      <section class="panel chart-panel">
+      <section class="panel chart-panel reveal reveal-delay-6">
         <div class="section-head">
           <p class="eyebrow">signal</p>
           <h2>Repository traction</h2>
@@ -216,7 +248,7 @@
       </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer reveal reveal-delay-6">
       <p>Terminal-first, automation-heavy, repository-aware.</p>
       <p><span id="year"></span> YCode CLI</p>
     </footer>

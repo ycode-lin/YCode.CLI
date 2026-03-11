@@ -24,48 +24,88 @@ if (year) {
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const terminalFrames = [
-  { text: "> explore: scanning project structure and package metadata", className: "comment" },
-  { text: "> plan: create release workflow and pages portal updates", className: "comment" },
-  { text: "assistant: I found a .NET tool project with NuGet publishing in place.", className: "assistant" },
-  { text: "assistant: Next, I will patch GitHub Actions, verify package metadata, and publish a tagged release.", className: "assistant" },
-  { text: "assistant: Portal refreshed. Terminal UI online. Typing simulation active.", className: "assistant" }
+const sessions = [
+  [
+    { text: "> explore: repo scan complete / .NET tool project detected", className: "comment" },
+    { text: "> tool: loaded package metadata, workflows, release tags", className: "tool" },
+    { text: "assistant: I found an existing publish pipeline and a CLI package targeting dotnet tool distribution.", className: "assistant" },
+    { text: "assistant: Next step is to patch automation, validate the package icon, and publish a tagged release.", className: "assistant" }
+  ],
+  [
+    { text: "> plan: build terminal-first portal / preserve deployment flow", className: "comment" },
+    { text: "> tool: editing docs/index.html, docs/assets/site.css, docs/assets/site.js", className: "tool" },
+    { text: "assistant: Rewriting the portal with a darker runtime deck, animated telemetry, and streamed terminal feedback.", className: "assistant" },
+    { text: "assistant: Motion stays GPU-friendly and respects reduced-motion preferences.", className: "assistant" }
+  ],
+  [
+    { text: "> release: v1.0.5 package online / pages synced / registry mirrored", className: "comment" },
+    { text: "> memory: profile + project context restored", className: "tool" },
+    { text: "assistant: Runtime healthy. You can keep driving work from the terminal instead of bouncing between tools.", className: "assistant" },
+    { text: "assistant: Ready for the next command.", className: "assistant" }
+  ]
 ];
+
+function delay(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
 
 function renderStaticTerminal() {
   if (!typedTerminal) return;
 
-  typedTerminal.innerHTML = terminalFrames
-    .map((frame) => `<span class="line ${frame.className}">${frame.text}</span>`)
-    .join("");
+  const lines = sessions.flatMap((session, index) => {
+    const sessionLines = session.map((frame) => `<span class="line ${frame.className}">${frame.text}</span>`);
+    if (index < sessions.length - 1) {
+      sessionLines.push('<span class="line comment">---</span>');
+    }
+    return sessionLines;
+  });
+
+  typedTerminal.innerHTML = `${lines.join("")}<span class="cursor" aria-hidden="true"></span>`;
 }
 
-async function playTerminalAnimation() {
+async function playTerminalLoop() {
   if (!typedTerminal) return;
   if (prefersReducedMotion) {
     renderStaticTerminal();
     return;
   }
 
-  typedTerminal.innerHTML = "";
+  while (true) {
+    typedTerminal.innerHTML = "";
 
-  for (const frame of terminalFrames) {
-    const line = document.createElement("span");
-    line.className = `line ${frame.className}`;
-    typedTerminal.appendChild(line);
+    for (let s = 0; s < sessions.length; s += 1) {
+      const session = sessions[s];
 
-    for (const character of frame.text) {
-      line.textContent += character;
-      await new Promise((resolve) => window.setTimeout(resolve, 18));
+      for (const frame of session) {
+        const line = document.createElement("span");
+        line.className = `line ${frame.className}`;
+        typedTerminal.appendChild(line);
+
+        for (const character of frame.text) {
+          line.textContent += character;
+          await delay(16);
+        }
+
+        await delay(180);
+      }
+
+      if (s < sessions.length - 1) {
+        const spacer = document.createElement("span");
+        spacer.className = "line comment";
+        spacer.textContent = "---";
+        typedTerminal.appendChild(spacer);
+      }
+
+      await delay(520);
     }
 
-    await new Promise((resolve) => window.setTimeout(resolve, 260));
-  }
+    const cursor = document.createElement("span");
+    cursor.className = "cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    typedTerminal.appendChild(cursor);
 
-  const cursor = document.createElement("span");
-  cursor.className = "cursor";
-  cursor.setAttribute("aria-hidden", "true");
-  typedTerminal.appendChild(cursor);
+    await delay(1800);
+  }
 }
 
-playTerminalAnimation();
+playTerminalLoop();
