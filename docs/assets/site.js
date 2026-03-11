@@ -49,62 +49,90 @@ function delay(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
 }
 
-function renderStaticTerminal() {
+function renderSessionMarkup(session) {
+  return session
+    .map((frame) => `<span class="line ${frame.className}">${frame.text}</span>`)
+    .join("");
+}
+
+function renderStaticTerminal(sessionIndex = 0) {
+  if (!typedTerminal) return;
+  typedTerminal.innerHTML = `${renderSessionMarkup(sessions[sessionIndex])}<span class="cursor" aria-hidden="true"></span>`;
+}
+
+async function playReducedMotionLoop() {
   if (!typedTerminal) return;
 
-  const lines = sessions.flatMap((session, index) => {
-    const sessionLines = session.map((frame) => `<span class="line ${frame.className}">${frame.text}</span>`);
-    if (index < sessions.length - 1) {
-      sessionLines.push('<span class="line comment">---</span>');
-    }
-    return sessionLines;
-  });
+  let index = 0;
+  renderStaticTerminal(index);
 
-  typedTerminal.innerHTML = `${lines.join("")}<span class="cursor" aria-hidden="true"></span>`;
+  while (true) {
+    await delay(2400);
+    typedTerminal.classList.add("is-switching");
+    await delay(220);
+    index = (index + 1) % sessions.length;
+    renderStaticTerminal(index);
+    typedTerminal.classList.remove("is-switching");
+  }
+}
+
+async function typeLine(line, text) {
+  for (const character of text) {
+    line.textContent += character;
+    await delay(16);
+  }
+}
+
+async function eraseLine(line) {
+  while (line.textContent.length > 0) {
+    line.textContent = line.textContent.slice(0, -1);
+    await delay(8);
+  }
 }
 
 async function playTerminalLoop() {
   if (!typedTerminal) return;
   if (prefersReducedMotion) {
-    renderStaticTerminal();
+    await playReducedMotionLoop();
     return;
   }
 
+  const lines = [];
+
   while (true) {
     typedTerminal.innerHTML = "";
+    lines.length = 0;
 
-    for (let s = 0; s < sessions.length; s += 1) {
-      const session = sessions[s];
-
+    for (const session of sessions) {
       for (const frame of session) {
         const line = document.createElement("span");
         line.className = `line ${frame.className}`;
         typedTerminal.appendChild(line);
+        lines.push(line);
 
-        for (const character of frame.text) {
-          line.textContent += character;
-          await delay(16);
-        }
-
-        await delay(180);
+        await typeLine(line, frame.text);
+        await delay(120);
       }
 
-      if (s < sessions.length - 1) {
-        const spacer = document.createElement("span");
-        spacer.className = "line comment";
-        spacer.textContent = "---";
-        typedTerminal.appendChild(spacer);
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.setAttribute("aria-hidden", "true");
+      typedTerminal.appendChild(cursor);
+
+      await delay(900);
+      cursor.remove();
+
+      for (let i = lines.length - 1; i >= 0; i -= 1) {
+        await eraseLine(lines[i]);
+        lines[i].remove();
+        lines.pop();
+        await delay(40);
       }
 
-      await delay(520);
+      typedTerminal.classList.add("is-switching");
+      await delay(140);
+      typedTerminal.classList.remove("is-switching");
     }
-
-    const cursor = document.createElement("span");
-    cursor.className = "cursor";
-    cursor.setAttribute("aria-hidden", "true");
-    typedTerminal.appendChild(cursor);
-
-    await delay(1800);
   }
 }
 

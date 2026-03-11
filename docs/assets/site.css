@@ -444,6 +444,7 @@ h3 {
 .typed-terminal {
   min-height: 300px;
   white-space: pre-wrap;
+  transition: opacity 220ms ease, transform 220ms ease;
 }
 
 .typed-terminal .line {
@@ -469,6 +470,11 @@ h3 {
   margin-left: 2px;
   background: var(--green);
   animation: blink 1s steps(1) infinite;
+}
+
+.typed-terminal.is-switching {
+  opacity: 0.32;
+  transform: translateY(6px);
 }
 
 .telemetry {
