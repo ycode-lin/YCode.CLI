@@ -5,13 +5,23 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
 
 		<!-- 全局工具必备配置 -->
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>ycode</ToolCommandName>
-		<!-- 全局使用的命令名 -->
-		<PackageOutputPath>./nupkg</PackageOutputPath>
-		<!-- 可选：NuGet包输出目录 -->
+		<PackageId>YCode.CLI</PackageId>
+		<Version>1.0.4</Version>
+		<Authors>lyq-lin</Authors>
+		<Description>YCode is an AI-powered coding agent that operates inside your repository. It provides intelligent code assistance, file operations, and multi-step task management.</Description>
+		<PackageTags>ai;coding-agent;cli;dotnet-tool;developer-tools</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/ycode-lin/YCode.CLI</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/ycode-lin/YCode.CLI</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageOutputPath>$(MSBuildThisFileDirectory)nupkg</PackageOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -24,7 +34,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="nupkg\" />
+		<None Include="../README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

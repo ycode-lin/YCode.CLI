@@ -16,6 +16,9 @@
 
 # 运行（本地调试）
  dotnet run --project YCode.CLI\YCode.CLI.csproj
+
+# 作为全局工具安装（NuGet 发布后）
+ dotnet tool install --global YCode.CLI
 ```
 
 ## 配置
@@ -69,13 +72,24 @@ flowchart TD
 - **扩展功能**：基于项目实现更多代理类型或技能
 - **改进文档**：帮助完善使用说明和示例
 
+## 发布流程
+仓库已配置 GitHub Actions 自动发布：
+
+- 在 GitHub 创建一个 `Release`，tag 使用 `v1.0.4` 这类语义化版本格式
+- Workflow 会自动执行 `dotnet pack`
+- 生成的 `.nupkg` 会推送到 `nuget.org`
+- 同一个包也会推送到 GitHub Packages
+- 包文件会作为资产上传到对应的 GitHub Release
+
+Workflow 默认读取仓库里的 `NUGET_API_KEY` secret。
+
 ## 参考资源
 - [Microsoft Agents AI 文档](https://learn.microsoft.com/en-us/dotnet/agents/)
 - [MCP 协议规范](https://spec.modelcontextprotocol.io/)
 - [Kode 项目](https://github.com/shareAI-lab/Kode) (Python实现的参考)
 
 ## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=lyq-lin/YCode.CLI&type=Date)](https://star-history.com/#lyq-lin/YCode.CLI&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=ycode-lin/YCode.CLI&type=Date)](https://star-history.com/#ycode-lin/YCode.CLI&Date)
 
 ## 许可证
 MIT License
