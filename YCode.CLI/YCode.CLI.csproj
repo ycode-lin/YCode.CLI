@@ -10,8 +10,9 @@
 		<!-- 全局工具必备配置 -->
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>ycode</ToolCommandName>
+		<ApplicationIcon>app.ico</ApplicationIcon>
 		<PackageId>YCode.CLI</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<Authors>lyq-lin</Authors>
 		<Description>YCode is an AI-powered coding agent that operates inside your repository. It provides intelligent code assistance, file operations, and multi-step task management.</Description>
 		<PackageTags>ai;coding-agent;cli;dotnet-tool;developer-tools</PackageTags>
@@ -36,6 +37,7 @@
 
 	<ItemGroup>
 		<None Include="../README.md" Pack="true" PackagePath="\" />
+		<None Include="app.ico" />
 		<None Include="icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
