@@ -12,7 +12,7 @@
 		<ToolCommandName>ycode</ToolCommandName>
 		<ApplicationIcon>..\app.ico</ApplicationIcon>
 		<PackageId>YCode.CLI</PackageId>
-		<Version>1.0.6</Version>
+		<Version>0.0.0-dev</Version>
 		<Authors>lyq-lin</Authors>
 		<Description>YCode is an AI-powered coding agent that operates inside your repository. It provides intelligent code assistance, file operations, and multi-step task management.</Description>
 		<PackageTags>ai;coding-agent;cli;dotnet-tool;developer-tools</PackageTags>

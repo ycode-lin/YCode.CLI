@@ -78,13 +78,16 @@ flowchart TD
 - **改进文档**：帮助完善使用说明和示例
 
 ## 发布流程
-仓库已配置 GitHub Actions 自动发布：
+仓库已配置 GitHub Actions 自动发布，无需在发布前手动修改源码版本：
 
-- 在 GitHub 创建一个 `Release`，tag 使用 `v1.0.4` 这类语义化版本格式
-- Workflow 会自动执行 `dotnet pack`
-- 生成的 `.nupkg` 会推送到 `nuget.org`
-- 同一个包也会推送到 GitHub Packages
-- 包文件会作为资产上传到对应的 GitHub Release
+- 打开 `Publish NuGet Package` workflow
+- 输入版本号，例如 `1.0.7`
+- Workflow 会自动：
+- 创建 `v1.0.7` tag 和 GitHub Release
+- 执行 `dotnet pack`
+- 将 `.nupkg` 推送到 `nuget.org`
+- 将同一个包推送到 GitHub Packages
+- 把包文件上传到对应的 GitHub Release
 
 Workflow 默认读取仓库里的 `NUGET_API_KEY` secret。
 

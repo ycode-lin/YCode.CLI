@@ -1,10 +1,12 @@
 name: Publish NuGet Package
 
 on:
-  release:
-    types:
-      - published
   workflow_dispatch:
+    inputs:
+      version:
+        description: Release version without the v prefix, for example 1.0.7
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -17,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -27,24 +31,29 @@ jobs:
         id: version
         shell: bash
         run: |
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            TAG_NAME="${{ github.event.release.tag_name }}"
-          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
-            TAG_NAME="${{ github.ref_name }}"
-          else
-            echo "workflow_dispatch must be run from a tag ref such as v1.0.4." >&2
+          PACKAGE_VERSION="${{ inputs.version }}"
+          PACKAGE_VERSION="${PACKAGE_VERSION#v}"
+
+          if [[ ! "${PACKAGE_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Version must be a semantic version such as 1.0.7 or 1.0.7-rc.1." >&2
             exit 1
           fi
 
-          PACKAGE_VERSION="${TAG_NAME#v}"
+          TAG_NAME="v${PACKAGE_VERSION}"
+          CORE_VERSION="${PACKAGE_VERSION%%-*}"
+          IFS='.' read -r major minor patch <<< "${CORE_VERSION}"
+          FILE_VERSION="${major}.${minor}.${patch}.0"
 
-          if [[ -z "${PACKAGE_VERSION}" ]]; then
-            echo "Package version could not be resolved from the release tag." >&2
+          git fetch --tags --force
+
+          if git rev-parse -q --verify "refs/tags/${TAG_NAME}" >/dev/null; then
+            echo "Tag ${TAG_NAME} already exists." >&2
             exit 1
           fi
 
           echo "tag_name=${TAG_NAME}" >> "${GITHUB_OUTPUT}"
           echo "package_version=${PACKAGE_VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "file_version=${FILE_VERSION}" >> "${GITHUB_OUTPUT}"
 
       - name: Restore
         run: dotnet restore YCode.CLI/YCode.CLI.csproj
@@ -55,7 +64,11 @@ jobs:
           --configuration Release
           --no-restore
           -p:ContinuousIntegrationBuild=true
+          -p:Version=${{ steps.version.outputs.package_version }}
           -p:PackageVersion=${{ steps.version.outputs.package_version }}
+          -p:AssemblyVersion=${{ steps.version.outputs.file_version }}
+          -p:FileVersion=${{ steps.version.outputs.file_version }}
+          -p:InformationalVersion=${{ steps.version.outputs.package_version }}
           --output ${{ github.workspace }}/artifacts
 
       - name: Publish to NuGet.org
@@ -94,7 +107,7 @@ jobs:
             --api-key "${{ secrets.GITHUB_TOKEN }}" \
             --skip-duplicate
 
-      - name: Upload package to GitHub Release
+      - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -102,4 +115,7 @@ jobs:
           shopt -s nullglob
           packages=("${{ github.workspace }}/artifacts/"*.nupkg)
 
-          gh release upload "${{ steps.version.outputs.tag_name }}" "${packages[@]}" --clobber
+          gh release create "${{ steps.version.outputs.tag_name }}" "${packages[@]}" \
+            --target "${GITHUB_SHA}" \
+            --title "${{ steps.version.outputs.tag_name }}" \
+            --generate-notes
