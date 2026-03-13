@@ -31,19 +31,19 @@ namespace YCode.CLI
         public bool IsEnable => true;
         public Delegate Handler => this.Run;
 
-        private string Run(string skillName)
+        private string Run(string skill)
         {
-            var content = _skills.GetSkillContent(skillName);
+            var content = _skills.GetSkillContent(skill);
 
             if (String.IsNullOrWhiteSpace(content))
             {
                 var available = String.Join(',', _skills.GetSkills()) ?? "none";
 
-                return $"Error: Unknown skill '{skillName}'. Available: {available}";
+                return $"Error: Unknown skill '{skill}'. Available: {available}";
             }
 
             return $"""
-                <skill-loaded name="{skillName}">
+                <skill-loaded name="{skill}">
                 {content}
                 </skill-loaded>
 
@@ -52,7 +52,6 @@ namespace YCode.CLI
         }
     }
 }
-
 
 
 

@@ -8,6 +8,12 @@ var toolManager = provider.GetRequiredService<ToolManager>();
 var agentManager = provider.GetRequiredService<AgentManager>();
 var agentContext = provider.GetRequiredService<AgentContext>();
 var config = provider.GetRequiredService<AppConfig>();
+var appVersion =
+    typeof(AppConfig).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+        .OfType<System.Reflection.AssemblyInformationalVersionAttribute>()
+        .FirstOrDefault()?.InformationalVersion?.Split('+')[0]
+    ?? typeof(AppConfig).Assembly.GetName().Version?.ToString()
+    ?? "dev";
 
 var initial_reminder = $"""
     '<reminder source="system" topic="todos">'
@@ -290,7 +296,7 @@ void Banner()
     AnsiConsole.MarkupLine($"[dim]{topBorder}[/]");
     var emptyLine = "│" + new string(' ', bannerWidth - 2) + "│";
     AnsiConsole.MarkupLine($"[dim]{emptyLine}[/]");
-    var titleText = "YCode v1.0.0";
+    var titleText = $"YCode v{appVersion}";
     var titlePadding = (bannerWidth - 2 - titleText.Length) / 2;
     var titleLine = "│" + new string(' ', titlePadding) + $"[bold cyan]{titleText}[/]" + new string(' ', bannerWidth - 2 - titlePadding - titleText.Length) + "│";
     AnsiConsole.MarkupLine($"[dim]{titleLine}[/]");
@@ -460,4 +466,3 @@ public class Spinner : IDisposable
 }
 
 #endregion
-

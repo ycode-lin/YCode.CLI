@@ -5,6 +5,9 @@ namespace YCode.CLI
     {
         private const int DailyRetentionDays = 30;
         private const int MaxItemsPerList = 80;
+        private const int MaxContextChars = 12000;
+        private const int MaxContextLineChars = 280;
+        private const int MaxAgentInstructionsChars = 3500;
         private readonly string _rootDir;
         private readonly string _profilePath;
         private readonly string _dailyDir;
@@ -249,66 +252,73 @@ namespace YCode.CLI
 
             var projectKey = ResolveProjectKey(null)!;
             var projectMemories = LoadProjectMemories(projectKey);
-            var projectAgents = LoadProjectAgents(projectKey);
+            var workspaceAgents = LoadWorkspaceAgents();
+            var projectAgents = string.IsNullOrWhiteSpace(workspaceAgents)
+                ? LoadProjectAgents(projectKey)
+                : string.Empty;
 
             if (profile.Count == 0 && dailyList.Count == 0 && relatedNotes.Count == 0 && relatedDaily.Count == 0
-                && projectMemories.Count == 0 && string.IsNullOrWhiteSpace(projectAgents))
+                && projectMemories.Count == 0 && string.IsNullOrWhiteSpace(workspaceAgents) && string.IsNullOrWhiteSpace(projectAgents))
             {
                 return null;
             }
 
             var sb = new StringBuilder();
+            var remainingChars = MaxContextChars - ("<memory>\n</memory>\n".Length);
             sb.AppendLine("<memory>");
 
             if (profile.Count > 0)
             {
-                sb.AppendLine("profile:");
-                foreach (var item in profile.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(maxProfile))
-                {
-                    sb.AppendLine($"- {item.Content}");
-                }
+                AppendSection(
+                    sb,
+                    "profile:",
+                    profile.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(maxProfile).Select(x => x.Content),
+                    ref remainingChars);
             }
 
             if (projectMemories.Count > 0)
             {
-                sb.AppendLine($"project ({projectKey}):");
-                foreach (var item in projectMemories.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(20))
-                {
-                    sb.AppendLine($"- {item.Content}");
-                }
+                AppendSection(
+                    sb,
+                    $"project ({projectKey}):",
+                    projectMemories.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(20).Select(x => x.Content),
+                    ref remainingChars);
             }
 
-            if (!string.IsNullOrWhiteSpace(projectAgents))
+            if (!string.IsNullOrWhiteSpace(workspaceAgents))
             {
-                sb.AppendLine($"project-agents ({projectKey}/AGENTS.md):");
-                sb.AppendLine(projectAgents);
+                AppendBlock(sb, "workspace-agents (AGENTS.md):", workspaceAgents, MaxAgentInstructionsChars, ref remainingChars);
+            }
+            else if (!string.IsNullOrWhiteSpace(projectAgents))
+            {
+                AppendBlock(sb, $"project-agents (.ycode/projects/{projectKey}/AGENTS.md):", projectAgents, MaxAgentInstructionsChars, ref remainingChars);
             }
 
             if (dailyList.Count > 0)
             {
-                sb.AppendLine($"daily ({todayKey}):");
-                foreach (var item in dailyList.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(30))
-                {
-                    sb.AppendLine($"- {item.Content}");
-                }
+                AppendSection(
+                    sb,
+                    $"daily ({todayKey}):",
+                    dailyList.OrderByDescending(x => x.UpdatedAt ?? x.CreatedAt).Take(30).Select(x => x.Content),
+                    ref remainingChars);
             }
 
             if (relatedDaily.Count > 0)
             {
-                sb.AppendLine("daily-related:");
-                foreach (var item in relatedDaily)
-                {
-                    sb.AppendLine($"- [{item.DateKey}] {item.Content}");
-                }
+                AppendSection(
+                    sb,
+                    "daily-related:",
+                    relatedDaily.Select(x => $"[{x.DateKey}] {x.Content}"),
+                    ref remainingChars);
             }
 
             if (relatedNotes.Count > 0)
             {
-                sb.AppendLine("notes:");
-                foreach (var note in relatedNotes)
-                {
-                    sb.AppendLine($"- {note.Title}: {note.Preview}");
-                }
+                AppendSection(
+                    sb,
+                    "notes:",
+                    relatedNotes.Select(x => $"{x.Title}: {x.Preview}"),
+                    ref remainingChars);
             }
 
             sb.AppendLine("</memory>");
@@ -333,6 +343,14 @@ namespace YCode.CLI
         private string LoadProjectAgents(string projectKey)
         {
             var path = Path.Combine(_projectsDir, projectKey, "AGENTS.md");
+            if (!File.Exists(path)) return string.Empty;
+            var content = File.ReadAllText(path).Trim();
+            return string.IsNullOrWhiteSpace(content) ? string.Empty : content;
+        }
+
+        private string LoadWorkspaceAgents()
+        {
+            var path = Path.Combine(_workDir, "AGENTS.md");
             if (!File.Exists(path)) return string.Empty;
             var content = File.ReadAllText(path).Trim();
             return string.IsNullOrWhiteSpace(content) ? string.Empty : content;
@@ -552,6 +570,79 @@ namespace YCode.CLI
             return compact.Length <= maxChars ? compact : compact[..maxChars] + "...";
         }
 
+        private static string TrimMultiline(string text, int maxChars)
+        {
+            var normalized = text.Replace("\r\n", "\n").Trim();
+            if (normalized.Length <= maxChars)
+            {
+                return normalized;
+            }
+
+            return normalized[..Math.Max(0, maxChars - 3)].TrimEnd() + "...";
+        }
+
+        private static void AppendSection(StringBuilder sb, string header, IEnumerable<string> items, ref int remainingChars)
+        {
+            var materialized = items
+                .Select(x => CompactText(x, MaxContextLineChars))
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
+
+            if (materialized.Count == 0 || !TryAppendLine(sb, header, ref remainingChars))
+            {
+                return;
+            }
+
+            foreach (var item in materialized)
+            {
+                if (!TryAppendLine(sb, $"- {item}", ref remainingChars))
+                {
+                    break;
+                }
+            }
+        }
+
+        private static void AppendBlock(StringBuilder sb, string header, string content, int maxChars, ref int remainingChars)
+        {
+            if (string.IsNullOrWhiteSpace(content) || !TryAppendLine(sb, header, ref remainingChars))
+            {
+                return;
+            }
+
+            foreach (var line in TrimMultiline(content, maxChars).Split('\n'))
+            {
+                if (!TryAppendLine(sb, line, ref remainingChars))
+                {
+                    break;
+                }
+            }
+        }
+
+        private static bool TryAppendLine(StringBuilder sb, string line, ref int remainingChars)
+        {
+            if (remainingChars <= 0)
+            {
+                return false;
+            }
+
+            var normalized = line.Replace("\r", string.Empty);
+            var required = normalized.Length + Environment.NewLine.Length;
+            if (required > remainingChars)
+            {
+                if (remainingChars <= 3 + Environment.NewLine.Length)
+                {
+                    return false;
+                }
+
+                normalized = normalized[..Math.Max(0, remainingChars - Environment.NewLine.Length - 3)].TrimEnd() + "...";
+                required = normalized.Length + Environment.NewLine.Length;
+            }
+
+            sb.AppendLine(normalized);
+            remainingChars -= required;
+            return true;
+        }
+
         private static string? ResolveDateKey(string? date)
         {
             if (string.IsNullOrWhiteSpace(date)) return DateTime.Now.ToString("yyyy-MM-dd");
@@ -589,8 +680,4 @@ namespace YCode.CLI
         public List<string>? Tags { get; set; } = [];
     }
 }
-
-
-
-
 

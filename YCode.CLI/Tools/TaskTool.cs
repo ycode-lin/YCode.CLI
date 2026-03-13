@@ -12,6 +12,7 @@ namespace YCode.CLI
             _config = config;
             _mcp = mcp;
             _manager = manager;
+            var supportedAgents = String.Join(", ", _manager.Agents.Keys.Select(x => $"\"{x}\""));
 
             this.Description = $$"""
                 {
@@ -22,7 +23,7 @@ namespace YCode.CLI
                         "properties": {
                             "description": { "type": "string", "description": "Short task name (3-5 words) for progress display" },
                             "prompt": { "type": "string", "description": "Detailed instructions for the subagent" },
-                            "agent_type": { "type": "string", "enum": [], "description": "Type of agent to spawn" }
+                            "agent_type": { "type": "string", "enum": [{{supportedAgents}}], "description": "Type of agent to spawn" }
                         },
                         "required": ["description", "prompt", "agent_type"],
                         "additionalProperties": false
@@ -37,8 +38,10 @@ namespace YCode.CLI
         public bool IsEnable => true;
         public Delegate Handler => this.Run;
 
-        private async Task<string> Run(string description, string prompt, string agentType)
+        private async Task<string> Run(string description, string prompt, string agent_type)
         {
+            var agentType = agent_type?.Trim() ?? String.Empty;
+
             if (!_manager.Agents.ContainsKey(agentType))
             {
                 throw new NotSupportedException($"Agent type '{agentType}' is not supported.");
@@ -182,7 +185,6 @@ namespace YCode.CLI
         }
     }
 }
-
 
 
 

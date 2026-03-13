@@ -6,17 +6,9 @@ namespace YCode.CLI
     {
         public static IServiceProvider Register(this IServiceCollection services)
         {
-            // Register ConfigManager first to ensure it's available
-            services.AddSingleton<ConfigManager>();
-
-            // Build a temporary provider to get ConfigManager
-            var tempProvider = services.BuildServiceProvider();
-            var configManager = tempProvider.GetRequiredService<ConfigManager>();
-
-            // Ensure configuration is set up
+            var configManager = new ConfigManager();
             configManager.EnsureConfiguration();
 
-            // Get configuration values from ConfigManager
             var key = configManager.GetEnvironmentVariable("YCODE_AUTH_TOKEN")
                       ?? throw new InvalidOperationException("YCODE_AUTH_TOKEN is required but not configured");
             var uri = configManager.GetEnvironmentVariable("YCODE_API_BASE_URI")
@@ -34,6 +26,7 @@ namespace YCode.CLI
                         ? "macOS"
                         : "Unknown";
 
+            services.AddSingleton(configManager);
             services.AddSingleton(new AppConfig(key, uri, model, workDir, osPlatform, osDescription));
 
             services.RegisterAttributedServices();
@@ -60,6 +53,14 @@ namespace YCode.CLI
                 }
 
                 var serviceType = attr.ServiceType ?? type;
+                var alreadyRegistered = services.Any(descriptor =>
+                    descriptor.ServiceType == serviceType &&
+                    (descriptor.ImplementationType == type || descriptor.ImplementationInstance?.GetType() == type));
+
+                if (alreadyRegistered)
+                {
+                    continue;
+                }
 
                 switch (attr.Lifetime)
                 {
@@ -106,5 +107,4 @@ namespace YCode.CLI
         { }
     }
 }
-
 

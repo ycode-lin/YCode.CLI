@@ -472,15 +472,26 @@ namespace YCode.CLI
                 throw new Exception("path is required.");
             }
 
+            var workspaceRoot = Path.GetFullPath(config.WorkDir)
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             var fullPath = Path.IsPathRooted(path)
                 ? Path.GetFullPath(path)
                 : Path.GetFullPath(Path.Combine(config.WorkDir, path));
+            var comparison = config.OsPlatform == "Windows"
+                ? StringComparison.OrdinalIgnoreCase
+                : StringComparison.Ordinal;
+            var workspacePrefix = workspaceRoot + Path.DirectorySeparatorChar;
+
+            if (!fullPath.Equals(workspaceRoot, comparison) &&
+                !fullPath.StartsWith(workspacePrefix, comparison))
+            {
+                throw new Exception("Path is outside the workspace.");
+            }
 
             return fullPath;
         }
     }
 }
-
 
 
 
