@@ -162,10 +162,9 @@ while (true)
 
     try
     {
-        var tools_uses = new List<FunctionResultContent>();
         string? currentToolName = null;
-        bool isFirstTool = true;
         DateTime? toolStartTime = null;
+        var isFirstTool = true;
 
         spinner.Start();
 
@@ -216,7 +215,6 @@ while (true)
                         break;
                     case FunctionResultContent result:
                         {
-                            tools_uses.Add(result);
                             if (currentToolName != null)
                             {
                                 HideToolSpinner();
